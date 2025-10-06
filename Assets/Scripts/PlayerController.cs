@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     private int count;
     public TextMeshProUGUI countText;
     public GameObject winTextObject;
+    public Transform respawnPoint;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -23,6 +24,13 @@ public class PlayerController : MonoBehaviour
         float movimentoVertical = Input.GetAxis("Vertical");
         Vector3 movimento = new Vector3(movimentoHorizontal, 0.0f, movimentoVertical);
         rb.AddForce(movimento * velocidade);
+
+        // Se cair muito, reseta
+        if (transform.position.y < -10f)
+        {
+            transform.position = respawnPoint.position;
+            GetComponent<Rigidbody>().velocity = Vector3.zero; // zera o impulso
+        }
     }
     void OnTriggerEnter(Collider other)
     {
@@ -41,6 +49,8 @@ public class PlayerController : MonoBehaviour
         if (count >= 10)
         {
             winTextObject.SetActive(true);
+            FindObjectOfType<Timer>().enabled = false; // desliga o timer quando vencer
+            Time.timeScale = 0f;
         }
 
     }
