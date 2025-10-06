@@ -12,13 +12,6 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Principal");
     }
 
-    // volta para o menu (botoes dentro do jogo)
-    public void LoadMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
-    }
-
     public void ExitGame()
     {
         Application.Quit();
