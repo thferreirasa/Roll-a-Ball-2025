@@ -12,42 +12,44 @@ public class Timer : MonoBehaviour
     public Color normalColor = Color.white;
     public Color warningColor = Color.red;
     public float warningTime = 10f;
-    public GameObject retryButton;
 
     private bool isGameOver = false;
 
-    // Update is called once per frame
     private void Start()
     {
         loseText.SetActive(false);
+        Time.timeScale = 1f; // garante que o jogo comece rodando normal
     }
+
     void Update()
     {
         if (isGameOver)
-        {
             return;
-        }
 
         timeLeft -= Time.deltaTime;
 
-        if (timeLeft < 0)
+        if (timeLeft <= 0)
         {
             timeLeft = 0;
             isGameOver = true;
-            if (loseText != null) loseText.SetActive(true);
-            Time.timeScale = 0f; // pausa o jogo
-            loseText.SetActive(true);
+
+            if (loseText != null)
+            {
+                loseText.SetActive(true);
+            }
+
+
+            StartCoroutine(ReturnToMenuAfterDelay(3f));
         }
 
         if (timerText != null)
         {
             timerText.text = "Time: " + Mathf.Ceil(timeLeft).ToString();
 
-            // Muda a cor se estiver perto do fim
+            // muda a cor se estiver perto do fim
             if (timeLeft <= warningTime)
             {
-                // Faz piscar entre normal e vermelho
-                float t = Mathf.PingPong(Time.time * 5f, 1f); // 5f = velocidade do piscar
+                float t = Mathf.PingPong(Time.time * 5f, 1f);
                 timerText.color = Color.Lerp(normalColor, warningColor, t);
             }
             else
@@ -55,5 +57,12 @@ public class Timer : MonoBehaviour
                 timerText.color = normalColor;
             }
         }
+    }
+
+    // espera alguns segundos e carrega o menu
+    IEnumerator ReturnToMenuAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("MainMenu");
     }
 }

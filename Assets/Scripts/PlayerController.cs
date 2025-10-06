@@ -50,9 +50,16 @@ public class PlayerController : MonoBehaviour
         {
             winTextObject.SetActive(true);
             FindObjectOfType<Timer>().enabled = false; // desliga o timer quando vencer
-            Time.timeScale = 0f;
+            StartCoroutine(ReturnToMenuAfterDelay(3f)); // volta pro menu depois de 3 segundos
         }
 
+    }
+
+    // corrotina - voltar pro menu depois de segundos
+    IEnumerator ReturnToMenuAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu"); // nome da sua cena do menu
     }
 
 }
